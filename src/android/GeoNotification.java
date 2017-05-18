@@ -9,6 +9,7 @@ public class GeoNotification {
     @Expose public double longitude;
     @Expose public int radius;
     @Expose public int transitionType;
+    @Expose public String url;
 
     @Expose public Notification notification;
 

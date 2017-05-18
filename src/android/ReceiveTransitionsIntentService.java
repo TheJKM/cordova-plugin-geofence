@@ -70,8 +70,10 @@ public class ReceiveTransitionsIntentService extends IntentService {
                             .getGeoNotification(fenceId);
 
                     if (geoNotification != null) {
+                        GeofencePlugin.sendAjax(geoNotification);
                         if (geoNotification.notification != null) {
-                            notifier.notify(geoNotification.notification);
+                                // Josh: No notifications to be send
+                            // notifier.notify(geoNotification.notification);
                         }
                         geoNotification.transitionType = transitionType;
                         geoNotifications.add(geoNotification);

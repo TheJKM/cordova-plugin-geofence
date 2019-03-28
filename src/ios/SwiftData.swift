@@ -998,7 +998,8 @@ public struct SwiftData {
 		
 		let imagePath = imageDirPath.stringByAppendingPathComponent(imageID)
 		
-		let imageAsData = UIImagePNGRepresentation(image)
+		//let imageAsData = UIImagePNGRepresentation(image)
+		let imageAsData = image.jpegData(compressionQuality: 0.75)
 		if !((try? imageAsData!.write(to: URL(fileURLWithPath: imagePath), options: [.atomic])) != nil) {
 			print("Error saving image")
 			return nil

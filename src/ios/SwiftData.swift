@@ -899,7 +899,7 @@ public struct SwiftData {
 
         let imagePath = imageDirPath.stringByAppendingPathComponent(imageID)
 
-        let imageAsData = image.pngData()
+        let imageAsData = UIImagePNGRepresentation(image)
         if !((try? imageAsData!.write(to: URL(fileURLWithPath: imagePath), options: [.atomic])) != nil) {
             print("Error saving image")
             return nil

@@ -50,9 +50,9 @@ func log(_ messages: [String]) {
         log("Plugin initialization")
         //let faker = GeofenceFaker(manager: geoNotificationManager)
         //faker.start()
-        if iOS8 {
-            promptForNotificationPermission()
-        }
+//        if iOS8 {
+//            promptForNotificationPermission()
+//        }
 
         geoNotificationManager = GeoNotificationManager()
         geoNotificationManager.registerPermissions()
@@ -196,7 +196,7 @@ class GeofenceFaker {
                 let notify = arc4random_uniform(4)
                 if notify == 0 {
                     log("FAKER notify chosen, need to pick up some region")
-                    var geos = self.geoNotificationManager.getWatchedGeoNotifications()!
+                    let geos = self.geoNotificationManager.getWatchedGeoNotifications()!
                     if geos.count > 0 {
                         //WTF Swift??
                         let index = arc4random_uniform(UInt32(geos.count))
@@ -238,6 +238,7 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
     func registerPermissions() {
         if iOS8 {
             locationManager.requestAlwaysAuthorization()
+            locationManager.allowsBackgroundLocationUpdates = true
         }
     }
 
@@ -273,7 +274,7 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
 
     func checkRequirements() -> (Bool, [String], [String]) {
         var errors = [String]()
-        var warnings = [String]()
+        let warnings = [String]()
 
         if (!CLLocationManager.isMonitoringAvailable(for: CLRegion.self)) {
             errors.append("Geofencing not available")
@@ -289,27 +290,27 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
             errors.append("Warning: Location always permissions not granted")
         }
 
-        if (iOS8) {
-            if let notificationSettings = UIApplication.shared.currentUserNotificationSettings {
-                if notificationSettings.types == UIUserNotificationType() {
-                    errors.append("Error: notification permission missing")
-                } else {
-                    if !notificationSettings.types.contains(.sound) {
-                        warnings.append("Warning: notification settings - sound permission missing")
-                    }
-
-                    if !notificationSettings.types.contains(.alert) {
-                        warnings.append("Warning: notification settings - alert permission missing")
-                    }
-
-                    if !notificationSettings.types.contains(.badge) {
-                        warnings.append("Warning: notification settings - badge permission missing")
-                    }
-                }
-            } else {
-                errors.append("Error: notification permission missing")
-            }
-        }
+//        if (iOS8) {
+//            if let notificationSettings = UIApplication.shared.currentUserNotificationSettings {
+//                if notificationSettings.types == UIUserNotificationType() {
+//                    errors.append("Error: notification permission missing")
+//                } else {
+//                    if !notificationSettings.types.contains(.sound) {
+//                        warnings.append("Warning: notification settings - sound permission missing")
+//                    }
+//
+//                    if !notificationSettings.types.contains(.alert) {
+//                        warnings.append("Warning: notification settings - alert permission missing")
+//                    }
+//
+//                    if !notificationSettings.types.contains(.badge) {
+//                        warnings.append("Warning: notification settings - badge permission missing")
+//                    }
+//                }
+//            } else {
+//                errors.append("Error: notification permission missing")
+//            }
+//        }
 
         let ok = (errors.count == 0)
 
@@ -393,10 +394,10 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         if var geoNotification = store.findById(region.identifier) {
             geoNotification["transitionType"].int = transitionType
 
-            	// HERE - right here!
-			sendAjax(geoNotification)
+                // HERE - right here!
+//            sendAjax(geoNotification)
 
-				// Disabling the notification - using ajax above to trigger from server	
+                // Disabling the notification - using ajax above to trigger from server
             // if geoNotification["notification"].isExists() {
             //    notifyAbout(geoNotification)
             // }
@@ -406,23 +407,23 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
     }
 
     func sendAjax(_ geo: JSON) {
-		log("**** sendAjax \(geo)")
-		
-		if let json = geo["url"] as JSON? {
-			let geoUrl = json.rawString(String.Encoding.utf8.rawValue, options: [])!
-		
-			let url = URL(string: geoUrl)
-			let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-				if let data = data,
-					let html = String(data: data, encoding: String.Encoding.utf8) {
-					print(html)
-				}
-			}
-			task.resume()
+        log("**** sendAjax \(geo)")
+        
+        if let json = geo["url"] as JSON? {
+            let geoUrl = json.rawString(String.Encoding.utf8.rawValue, options: [])!
+        
+            let url = URL(string: geoUrl)
+            let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+                if let data = data,
+                    let html = String(data: data, encoding: String.Encoding.utf8) {
+                    print(html)
+                }
+            }
+            task.resume()
 
-		}
+        }
 
-	}
+    }
 
     func notifyAbout(_ geo: JSON) {
         log("Creating notification")

@@ -129,10 +129,14 @@
             <string>$GEOFENCE_IN_USE_USAGE_DESCRIPTION</string>
         </config-file>
 
+        <config-file target="*-Info.plist" parent="NSLocationAlwaysAndWhenInUseUsageDescription">
+            <string>$GEOFENCE_ALWAYS_USAGE_DESCRIPTION</string>
+        </config-file>
+
 
         <config-file target="*-Info.plist" parent="UIBackgroundModes">
             <array>
-                <string>remote-notification</string>
+                <string>location</string>
             </array>
         </config-file>
         <config-file target="config.xml" parent="/*">

@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ReceiveTransitionsIntentService extends IntentService {
     protected static final String GeofenceTransitionIntent = "com.cowbell.cordova.geofence.TRANSITION";
+    protected BeepHelper beepHelper;
     protected GeoNotificationNotifier notifier;
     protected GeoNotificationStore store;
 
@@ -22,6 +23,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
      */
     public ReceiveTransitionsIntentService() {
         super("ReceiveTransitionsIntentService");
+        beepHelper = new BeepHelper();
         store = new GeoNotificationStore(this);
         Logger.setLogger(new Logger(GeofencePlugin.TAG, this, false));
     }
@@ -68,10 +70,9 @@ public class ReceiveTransitionsIntentService extends IntentService {
                             .getGeoNotification(fenceId);
 
                     if (geoNotification != null) {
-                        GeofencePlugin.sendAjax(geoNotification);
                         if (geoNotification.notification != null) {
-                                // Josh: No notifications to be send
-                            // notifier.notify(geoNotification.notification);
+                           notifier.notify(geoNotification.notification);
+                          // notifier.notify(geoNotification.notification, transitionType == Geofence.GEOFENCE_TRANSITION_ENTER ? "enter" : "exit");
                         }
                         geoNotification.transitionType = transitionType;
                         geoNotifications.add(geoNotification);

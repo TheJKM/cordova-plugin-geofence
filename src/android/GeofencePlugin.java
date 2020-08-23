@@ -16,13 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,11 +110,9 @@ public class GeofencePlugin extends CordovaPlugin {
     }
 
     public static void onTransitionReceived(List<GeoNotification> notifications) {
-            // JOSH: this might be where I send the ping
-        Log.d(TAG, "Transition Event Received!");
-        Log.d(TAG, "Transition Event Received: args: " + Gson.get().toJson(notifications));
-        String js = "setTimeout('geofence.onTransitionReceived("
-            + Gson.get().toJson(notifications) + ")',0)";
+      Log.d(TAG, "Transition Event Received");
+      String js = "geofence.onTransitionReceived(" + Gson.get().toJson(notifications) + ");";
+
         if (webView == null) {
             Log.d(TAG, "Webview is null");
         } else {
@@ -129,40 +120,10 @@ public class GeofencePlugin extends CordovaPlugin {
         }
     }
 
-    public static void sendAjax(GeoNotification notification) {
-        Log.d(TAG, "sendAjax!");
-        Log.d(TAG, "Transition sendAjax! "+notification.url);
-
-        URL url;
-        HttpURLConnection urlConnection = null;
-        try {
-            url = new URL(notification.url);
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            InputStream in = urlConnection.getInputStream();
-
-            InputStreamReader isw = new InputStreamReader(in);
-
-            int data = isw.read();
-            while (data != -1) {
-                char current = (char) data;
-                data = isw.read();
-                System.out.print(current);
-            }
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }    
-        }
-    }
-    
     private void deviceReady() {
         Intent intent = cordova.getActivity().getIntent();
         String data = intent.getStringExtra("geofence.notification.data");
-        String js = "setTimeout('geofence.onNotificationClicked(" + data + ")',0)";
+        String js = "geofence.onNotificationClicked(" + data + ");";
 
         if (data == null) {
             Log.d(TAG, "No notifications clicked.");

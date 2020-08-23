@@ -10,21 +10,28 @@ public class GeoNotification {
     @Expose public double longitude;
     @Expose public int radius;
     @Expose public int transitionType;
+    
     @Expose public String url;
     @Expose public String auth;
     
-
     @Expose public Notification notification;
 
     public GeoNotification() {
     }
 
     public Geofence toGeofence() {
-        return new Geofence.Builder()
+//         return new Geofence.Builder()
+//             .setRequestId(id)
+//             .setTransitionTypes(transitionType)
+//             .setCircularRegion(latitude, longitude, radius)
+//             .setExpirationDuration(Long.MAX_VALUE).build();
+
+           return new Geofence.Builder()
             .setRequestId(id)
-            .setTransitionTypes(transitionType)
             .setCircularRegion(latitude, longitude, radius)
-            .setExpirationDuration(Long.MAX_VALUE).build();
+            .setTransitionTypes(transitionType)
+            .setLoiteringDelay(1)
+            .setExpirationDuration(Geofence.NEVER_EXPIRE).build();
     }
 
     public String toJson() {

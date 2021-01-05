@@ -32,9 +32,7 @@
   ],
   "author": "Cowbell Labs",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/TheJKM/cordova-plugin-geofence/issues"
-  },
+  "bugs": "https://github.com/TheJKM/cordova-plugin-geofence/issues",
   "homepage": "https://github.com/TheJKM/cordova-plugin-geofence#readme",
   "engines": [
     {

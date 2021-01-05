@@ -18,10 +18,7 @@
     "test": "cordova-paramedic --platform android@6.0 --plugin . --verbose",
     "posttest": "sed -i 's/play-services-location:9.8.0/play-services-location:+/g' plugin.xml"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TheJKM/cordova-plugin-geofence.git"
-  },
+  "repository": "github:TheJKM/cordova-plugin-geofence",
   "keywords": [
     "cordova",
     "plugin",
